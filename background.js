@@ -39,11 +39,13 @@ function showTimezonePopup(selectedText) {
   popup.style.padding = "10px";
   popup.style.zIndex = "10000";
 
-  // Position the popup at the cursor's location
-  document.addEventListener("mousemove", (event) => {
-    popup.style.left = `${event.pageX}px`;
-    popup.style.top = `${event.pageY}px`;
-  }, { once: true });
+  const selection = window.getSelection();
+  if (selection.rangeCount > 0) {
+    const range = selection.getRangeAt(0);
+    const rect = range.getBoundingClientRect();
+    popup.style.left = `${rect.left + window.scrollX}px`;
+    popup.style.top = `${rect.bottom + window.scrollY}px`;
+  }
 
   timezones.forEach((tz) => {
     let offset = offsets[tz];
