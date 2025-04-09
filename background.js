@@ -39,6 +39,12 @@ function showTimezonePopup(selectedText) {
   popup.style.padding = "10px";
   popup.style.zIndex = "10000";
 
+  // Position the popup at the cursor's location
+  document.addEventListener("mousemove", (event) => {
+    popup.style.left = `${event.pageX}px`;
+    popup.style.top = `${event.pageY}px`;
+  }, { once: true });
+
   timezones.forEach((tz) => {
     let offset = offsets[tz];
     let localTime = new Date(date.getTime() + offset * 3600 * 1000);
