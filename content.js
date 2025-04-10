@@ -42,6 +42,10 @@ function showTimezonePopup(selectedText) {
   popup.style.padding = "10px";
   popup.style.zIndex = "10000";
 
+  popup.addEventListener("click", (event) => {
+    event.stopPropagation();
+  });
+
   const selection = window.getSelection();
   if (selection.rangeCount > 0) {
     const range = selection.getRangeAt(0);
