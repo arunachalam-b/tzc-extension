@@ -65,6 +65,7 @@ function showTimezonePopup(selectedText) {
 
   // Display saved timezones
   const displaySavedTimezones = () => {
+    const savedTimezones = JSON.parse(localStorage.getItem("selectedTimezones")) || [];
     savedTimezones.forEach(({ location, abbreviation, offset }) => {
       let localTime = new Date(date.getTime() + offset * 3600 * 1000);
       let timeElement = document.createElement("div");
