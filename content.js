@@ -55,16 +55,19 @@ function showTimezonePopup(selectedText) {
   }
 
   // Display user's local timezone
-  const userTimezone = timezones.find(tz => tz.offset === userTimezoneOffset);
-  if (userTimezone) {
-    let localTime = new Date(date.getTime() + userTimezone.offset * 3600 * 1000);
-    let timeElement = document.createElement("div");
-    timeElement.textContent = `Your Timezone (${userTimezone.location} - ${userTimezone.abbreviation}): ${localTime.toISOString().slice(0, 19).replace("T", " ")}`;
-    popup.appendChild(timeElement);
+  const showUserTimezone = () => {
+    const userTimezone = timezones.find(tz => tz.offset === userTimezoneOffset);
+    if (userTimezone) {
+      let localTime = new Date(date.getTime() + userTimezone.offset * 3600 * 1000);
+      let timeElement = document.createElement("div");
+      timeElement.textContent = `Your Timezone (${userTimezone.location} - ${userTimezone.abbreviation}): ${localTime.toISOString().slice(0, 19).replace("T", " ")}`;
+      popup.appendChild(timeElement);
+    }
   }
 
   // Display saved timezones
   const displaySavedTimezones = () => {
+    showUserTimezone();
     const savedTimezones = JSON.parse(localStorage.getItem("selectedTimezones")) || [];
     savedTimezones.forEach(({ location, abbreviation, offset }) => {
       let localTime = new Date(date.getTime() + offset * 3600 * 1000);
