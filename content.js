@@ -87,6 +87,8 @@ function showTimezonePopup(selectedText) {
   dropdown.style.padding = "10px";
   dropdown.style.marginTop = "10px";
   dropdown.style.background = "#f9f9f9";
+  dropdown.style.maxHeight = "200px";
+  dropdown.style.overflowY = "auto";
 
   timezones.forEach(({ location, abbreviation, offset }) => {
     let checkboxContainer = document.createElement("div");
