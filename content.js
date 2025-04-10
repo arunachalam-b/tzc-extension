@@ -54,6 +54,10 @@ function showTimezonePopup(selectedText) {
     popup.style.top = `${rect.bottom + window.scrollY}px`;
   }
 
+  let timeRoot = document.createElement("div");
+  timeRoot.id = "timeRoot";
+  popup.appendChild(timeRoot);
+  
   // Display user's local timezone
   const showUserTimezone = () => {
     const userTimezone = timezones.find(tz => tz.offset === userTimezoneOffset);
@@ -61,19 +65,27 @@ function showTimezonePopup(selectedText) {
       let localTime = new Date(date.getTime() + userTimezone.offset * 3600 * 1000);
       let timeElement = document.createElement("div");
       timeElement.textContent = `Your Timezone (${userTimezone.location} - ${userTimezone.abbreviation}): ${localTime.toISOString().slice(0, 19).replace("T", " ")}`;
-      popup.appendChild(timeElement);
+      timeRoot.appendChild(timeElement);
+    }
+  }
+
+  const clearTimeRoot = () => {
+    // const timeRoot = document.getElementById("timeRoot");
+    while (timeRoot && timeRoot.firstChild) {
+      timeRoot.removeChild(timeRoot.firstChild);
     }
   }
 
   // Display saved timezones
   const displaySavedTimezones = () => {
+    clearTimeRoot();
     showUserTimezone();
     const savedTimezones = JSON.parse(localStorage.getItem("selectedTimezones")) || [];
     savedTimezones.forEach(({ location, abbreviation, offset }) => {
       let localTime = new Date(date.getTime() + offset * 3600 * 1000);
       let timeElement = document.createElement("div");
       timeElement.textContent = `${location} (${abbreviation}): ${localTime.toISOString().slice(0, 19).replace("T", " ")}`;
-      popup.appendChild(timeElement);
+      timeRoot.appendChild(timeElement);
     });
   };
   displaySavedTimezones();
@@ -114,7 +126,13 @@ function showTimezonePopup(selectedText) {
 
   // Show dropdown when Add Timezone button is clicked
   addTimezoneButton.onclick = () => {
-    dropdown.style.display = dropdown.style.display === "none" ? "block" : "none";
+    if (dropdown.style.display === "none") {
+      dropdown.style.display = "block";
+      addTimezoneButton.textContent = "Hide Timezones";
+    } else {
+      addTimezoneButton.textContent = "Add Timezone";
+      dropdown.style.display = "none";
+    }
   };
 
   // Save button
@@ -128,11 +146,13 @@ function showTimezonePopup(selectedText) {
     localStorage.setItem("selectedTimezones", JSON.stringify(selectedTimezones));
 
     // Clear and re-display saved timezones
-    Array.from(popup.querySelectorAll("div")).forEach(div => {
-      if (!div.contains(addTimezoneButton) && !div.contains(dropdown)) {
-        div.remove();
-      }
-    });
+    // Array.from(popup.querySelectorAll("div")).forEach(div => {
+    //   if (!div.contains(addTimezoneButton) && !div.contains(dropdown)) {
+    //     div.remove();
+    //   }
+    // });
+    addTimezoneButton.textContent = "Add Timezone";
+    dropdown.style.display = "none";
     displaySavedTimezones();
   };
 
