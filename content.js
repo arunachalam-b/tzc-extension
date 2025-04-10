@@ -58,7 +58,6 @@ function showTimezonePopup(selectedText) {
   timeRoot.id = "timeRoot";
   popup.appendChild(timeRoot);
   
-  // Display user's local timezone
   const showUserTimezone = () => {
     const userTimezone = timezones.find(tz => tz.offset === userTimezoneOffset);
     if (userTimezone) {
@@ -70,13 +69,11 @@ function showTimezonePopup(selectedText) {
   }
 
   const clearTimeRoot = () => {
-    // const timeRoot = document.getElementById("timeRoot");
     while (timeRoot && timeRoot.firstChild) {
       timeRoot.removeChild(timeRoot.firstChild);
     }
   }
 
-  // Display saved timezones
   const displaySavedTimezones = () => {
     clearTimeRoot();
     showUserTimezone();
@@ -90,13 +87,11 @@ function showTimezonePopup(selectedText) {
   };
   displaySavedTimezones();
 
-  // Add Timezone button
   let addTimezoneButton = document.createElement("button");
   addTimezoneButton.textContent = "Add Timezone";
   addTimezoneButton.style.marginTop = "10px";
   popup.appendChild(addTimezoneButton);
 
-  // Dropdown with checkboxes
   let dropdown = document.createElement("div");
   dropdown.style.display = "none";
   dropdown.style.border = "1px solid #ccc";
@@ -124,7 +119,6 @@ function showTimezonePopup(selectedText) {
 
   popup.appendChild(dropdown);
 
-  // Show dropdown when Add Timezone button is clicked
   addTimezoneButton.onclick = () => {
     if (dropdown.style.display === "none") {
       dropdown.style.display = "block";
@@ -135,7 +129,6 @@ function showTimezonePopup(selectedText) {
     }
   };
 
-  // Save button
   let saveButton = document.createElement("button");
   saveButton.textContent = "Save";
   saveButton.style.marginTop = "10px";
@@ -145,12 +138,6 @@ function showTimezonePopup(selectedText) {
     const selectedTimezones = Array.from(dropdown.querySelectorAll("input[type='checkbox']:checked")).map(checkbox => JSON.parse(checkbox.value));
     localStorage.setItem("selectedTimezones", JSON.stringify(selectedTimezones));
 
-    // Clear and re-display saved timezones
-    // Array.from(popup.querySelectorAll("div")).forEach(div => {
-    //   if (!div.contains(addTimezoneButton) && !div.contains(dropdown)) {
-    //     div.remove();
-    //   }
-    // });
     addTimezoneButton.textContent = "Add Timezone";
     dropdown.style.display = "none";
     displaySavedTimezones();
