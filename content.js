@@ -34,6 +34,7 @@ function showTimezonePopup(selectedText) {
   const date = new Date(selectedText);
   const savedTimezones = JSON.parse(localStorage.getItem("selectedTimezones")) || [];
   const userTimezoneOffset = -new Date().getTimezoneOffset() / 60;
+  const timezoneButtonText = "Add/Remove";
 
   let popup = document.createElement("div");
   popup.style.position = "absolute";
@@ -88,7 +89,7 @@ function showTimezonePopup(selectedText) {
   displaySavedTimezones();
 
   let addTimezoneButton = document.createElement("button");
-  addTimezoneButton.textContent = "Add Timezone";
+  addTimezoneButton.textContent = timezoneButtonText;
   addTimezoneButton.style.marginTop = "10px";
   popup.appendChild(addTimezoneButton);
 
@@ -122,9 +123,9 @@ function showTimezonePopup(selectedText) {
   addTimezoneButton.onclick = () => {
     if (dropdown.style.display === "none") {
       dropdown.style.display = "block";
-      addTimezoneButton.textContent = "Hide Timezones";
+      addTimezoneButton.textContent = "Close";
     } else {
-      addTimezoneButton.textContent = "Add Timezone";
+      addTimezoneButton.textContent = timezoneButtonText;
       dropdown.style.display = "none";
     }
   };
@@ -138,7 +139,7 @@ function showTimezonePopup(selectedText) {
     const selectedTimezones = Array.from(dropdown.querySelectorAll("input[type='checkbox']:checked")).map(checkbox => JSON.parse(checkbox.value));
     localStorage.setItem("selectedTimezones", JSON.stringify(selectedTimezones));
 
-    addTimezoneButton.textContent = "Add Timezone";
+    addTimezoneButton.textContent = timezoneButtonText;
     dropdown.style.display = "none";
     displaySavedTimezones();
   };
