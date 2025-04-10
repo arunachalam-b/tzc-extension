@@ -64,41 +64,71 @@ function showTimezonePopup(selectedText) {
   }
 
   // Display saved timezones
-  savedTimezones.forEach(({ location, abbreviation, offset }) => {
-    let localTime = new Date(date.getTime() + offset * 3600 * 1000);
-    let timeElement = document.createElement("div");
-    timeElement.textContent = `${location} (${abbreviation}): ${localTime.toISOString().slice(0, 19).replace("T", " ")}`;
-    popup.appendChild(timeElement);
-  });
+  const displaySavedTimezones = () => {
+    savedTimezones.forEach(({ location, abbreviation, offset }) => {
+      let localTime = new Date(date.getTime() + offset * 3600 * 1000);
+      let timeElement = document.createElement("div");
+      timeElement.textContent = `${location} (${abbreviation}): ${localTime.toISOString().slice(0, 19).replace("T", " ")}`;
+      popup.appendChild(timeElement);
+    });
+  };
+  displaySavedTimezones();
 
-  // Multi-select dropdown for timezones
-  let dropdown = document.createElement("select");
-  dropdown.multiple = true;
-  dropdown.style.width = "100%";
+  // Add Timezone button
+  let addTimezoneButton = document.createElement("button");
+  addTimezoneButton.textContent = "Add Timezone";
+  addTimezoneButton.style.marginTop = "10px";
+  popup.appendChild(addTimezoneButton);
+
+  // Dropdown with checkboxes
+  let dropdown = document.createElement("div");
+  dropdown.style.display = "none";
+  dropdown.style.border = "1px solid #ccc";
+  dropdown.style.padding = "10px";
   dropdown.style.marginTop = "10px";
+  dropdown.style.background = "#f9f9f9";
 
   timezones.forEach(({ location, abbreviation, offset }) => {
-    let option = document.createElement("option");
-    option.value = JSON.stringify({ location, abbreviation, offset });
-    option.textContent = `${location} (${abbreviation})`;
-    if (savedTimezones.some(tz => tz.abbreviation === abbreviation)) {
-      option.selected = true;
-    }
-    dropdown.appendChild(option);
+    let checkboxContainer = document.createElement("div");
+    let checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.value = JSON.stringify({ location, abbreviation, offset });
+    checkbox.checked = savedTimezones.some(tz => tz.abbreviation === abbreviation);
+
+    let label = document.createElement("label");
+    label.textContent = `${location} (${abbreviation})`;
+    label.style.marginLeft = "5px";
+
+    checkboxContainer.appendChild(checkbox);
+    checkboxContainer.appendChild(label);
+    dropdown.appendChild(checkboxContainer);
   });
 
   popup.appendChild(dropdown);
 
+  // Show dropdown when Add Timezone button is clicked
+  addTimezoneButton.onclick = () => {
+    dropdown.style.display = dropdown.style.display === "none" ? "block" : "none";
+  };
+
   // Save button
   let saveButton = document.createElement("button");
-  saveButton.textContent = "Save Timezones";
+  saveButton.textContent = "Save";
   saveButton.style.marginTop = "10px";
+  dropdown.appendChild(saveButton);
+
   saveButton.onclick = () => {
-    const selectedOptions = Array.from(dropdown.selectedOptions).map(option => JSON.parse(option.value));
-    localStorage.setItem("selectedTimezones", JSON.stringify(selectedOptions));
-    alert("Timezones saved!");
+    const selectedTimezones = Array.from(dropdown.querySelectorAll("input[type='checkbox']:checked")).map(checkbox => JSON.parse(checkbox.value));
+    localStorage.setItem("selectedTimezones", JSON.stringify(selectedTimezones));
+
+    // Clear and re-display saved timezones
+    Array.from(popup.querySelectorAll("div")).forEach(div => {
+      if (!div.contains(addTimezoneButton) && !div.contains(dropdown)) {
+        div.remove();
+      }
+    });
+    displaySavedTimezones();
   };
-  popup.appendChild(saveButton);
 
   document.body.appendChild(popup);
 
