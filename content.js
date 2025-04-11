@@ -91,9 +91,61 @@ function showTimezonePopup(selectedText) {
     const savedTimezones = JSON.parse(localStorage.getItem("selectedTimezones")) || [];
     savedTimezones.forEach(({ location, abbreviation, offset }) => {
       let localTime = new Date(date.getTime() + offset * 3600 * 1000);
+
+      // Create a container for the timezone box
+      let timezoneBox = document.createElement("div");
+      timezoneBox.style.display = "flex";
+      timezoneBox.style.marginBottom = "10px";
+      timezoneBox.style.padding = "10px";
+      timezoneBox.style.background = "#f9f9f9";
+      timezoneBox.style.borderRadius = "5px";
+      timezoneBox.style.boxShadow = "0 2px 4px rgba(0, 0, 0, 0.1)";
+
+      // Create the left section (60%)
+      let leftSection = document.createElement("div");
+      leftSection.style.flex = "3";
+      leftSection.style.display = "flex";
+      leftSection.style.flexDirection = "column";
+      leftSection.style.justifyContent = "space-between";
+      leftSection.style.paddingRight = "10px";
+
+      // Add location (bolded) to the top half
+      let locationElement = document.createElement("div");
+      locationElement.textContent = location;
+      locationElement.style.fontWeight = "450";
+      locationElement.style.marginBottom = "5px";
+      leftSection.appendChild(locationElement);
+
+      // Add abbreviation (greyed out) to the bottom half
+      let abbreviationElement = document.createElement("div");
+      abbreviationElement.textContent = abbreviation;
+      abbreviationElement.style.color = "#6c757d";
+      leftSection.appendChild(abbreviationElement);
+
+      // Create the right section (40%)
+      let rightSection = document.createElement("div");
+      rightSection.style.flex = "2";
+      rightSection.style.display = "flex";
+      rightSection.style.flexDirection = "column";
+      rightSection.style.justifyContent = "space-between";
+
+      // Add date to the top half
+      let dateElement = document.createElement("div");
+      dateElement.textContent = localTime.toISOString().slice(0, 10); // Extract date
+      dateElement.style.marginBottom = "5px";
+      rightSection.appendChild(dateElement);
+
+      // Add time to the bottom half
       let timeElement = document.createElement("div");
-      timeElement.textContent = `${location} (${abbreviation}): ${localTime.toISOString().slice(0, 19).replace("T", " ")}`;
-      timeRoot.appendChild(timeElement);
+      timeElement.textContent = localTime.toISOString().slice(11, 19); // Extract time
+      rightSection.appendChild(timeElement);
+
+      // Append sections to the timezone box
+      timezoneBox.appendChild(leftSection);
+      timezoneBox.appendChild(rightSection);
+
+      // Append the timezone box to the root
+      timeRoot.appendChild(timezoneBox);
     });
   };
   displaySavedTimezones();
