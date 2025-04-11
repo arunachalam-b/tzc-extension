@@ -101,19 +101,24 @@ function showTimezonePopup(selectedText) {
       timezoneBox.style.borderRadius = "5px";
       timezoneBox.style.boxShadow = "0 2px 4px rgba(0, 0, 0, 0.1)";
 
-      // Create the left section (60%)
+      // Create the left section (50%)
       let leftSection = document.createElement("div");
-      leftSection.style.flex = "3";
+      leftSection.style.flex = "1";
       leftSection.style.display = "flex";
       leftSection.style.flexDirection = "column";
       leftSection.style.justifyContent = "space-between";
       leftSection.style.paddingRight = "10px";
 
-      // Add location (bolded) to the top half
+      // Add location (bolded) to the top half with ellipsis and tooltip
       let locationElement = document.createElement("div");
       locationElement.textContent = location;
       locationElement.style.fontWeight = "450";
       locationElement.style.marginBottom = "5px";
+      locationElement.style.whiteSpace = "nowrap";
+      locationElement.style.overflow = "hidden";
+      locationElement.style.textOverflow = "ellipsis";
+      locationElement.style.maxWidth = "200px"; // Explicitly set max width
+      locationElement.title = location; // Tooltip
       leftSection.appendChild(locationElement);
 
       // Add abbreviation (greyed out) to the bottom half
@@ -122,23 +127,24 @@ function showTimezonePopup(selectedText) {
       abbreviationElement.style.color = "#6c757d";
       leftSection.appendChild(abbreviationElement);
 
-      // Create the right section (40%)
+      // Create the right section (50%)
       let rightSection = document.createElement("div");
-      rightSection.style.flex = "2";
+      rightSection.style.flex = "1";
       rightSection.style.display = "flex";
       rightSection.style.flexDirection = "column";
       rightSection.style.justifyContent = "space-between";
 
-      // Add date to the top half
-      let dateElement = document.createElement("div");
-      dateElement.textContent = localTime.toISOString().slice(0, 10); // Extract date
-      dateElement.style.marginBottom = "5px";
-      rightSection.appendChild(dateElement);
+      // Add date and time in 24-hour format to the top half
+      let dateTime24Element = document.createElement("div");
+      dateTime24Element.textContent = `${localTime.toISOString().slice(0, 10)} ${localTime.toISOString().slice(11, 19)}`; // Date and time in 24-hour format
+      dateTime24Element.style.marginBottom = "5px";
+      rightSection.appendChild(dateTime24Element);
 
-      // Add time to the bottom half
-      let timeElement = document.createElement("div");
-      timeElement.textContent = localTime.toISOString().slice(11, 19); // Extract time
-      rightSection.appendChild(timeElement);
+      // Add date and time in 12-hour format to the bottom half
+      let dateTime12Element = document.createElement("div");
+      const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+      dateTime12Element.textContent = localTime.toLocaleString('en-US', options); // Date and time in 12-hour format
+      rightSection.appendChild(dateTime12Element);
 
       // Append sections to the timezone box
       timezoneBox.appendChild(leftSection);
