@@ -38,10 +38,20 @@ function showTimezonePopup(selectedText) {
 
   let popup = document.createElement("div");
   popup.style.position = "absolute";
-  popup.style.background = "#fff";
-  popup.style.border = "1px solid #ccc";
-  popup.style.padding = "10px";
+  popup.style.background = "#ffffff";
+  popup.style.border = "1px solid #ddd";
+  popup.style.padding = "15px";
   popup.style.zIndex = "10000";
+  popup.style.borderRadius = "8px";
+  popup.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.1)";
+  popup.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+  popup.style.opacity = "0";
+  popup.style.transform = "translateY(-10px)";
+
+  setTimeout(() => {
+    popup.style.opacity = "1";
+    popup.style.transform = "translateY(0)";
+  }, 10);
 
   popup.addEventListener("click", (event) => {
     event.stopPropagation();
@@ -91,16 +101,27 @@ function showTimezonePopup(selectedText) {
   let addTimezoneButton = document.createElement("button");
   addTimezoneButton.textContent = timezoneButtonText;
   addTimezoneButton.style.marginTop = "10px";
+  addTimezoneButton.style.padding = "8px 12px";
+  addTimezoneButton.style.border = "none";
+  addTimezoneButton.style.borderRadius = "5px";
+  addTimezoneButton.style.background = "#007BFF";
+  addTimezoneButton.style.color = "#ffffff";
+  addTimezoneButton.style.cursor = "pointer";
+  addTimezoneButton.style.transition = "background 0.3s ease";
+  addTimezoneButton.onmouseover = () => addTimezoneButton.style.background = "#0056b3";
+  addTimezoneButton.onmouseout = () => addTimezoneButton.style.background = "#007BFF";
   popup.appendChild(addTimezoneButton);
 
   let dropdown = document.createElement("div");
   dropdown.style.display = "none";
-  dropdown.style.border = "1px solid #ccc";
+  dropdown.style.border = "1px solid #ddd";
   dropdown.style.padding = "10px";
   dropdown.style.marginTop = "10px";
   dropdown.style.background = "#f9f9f9";
   dropdown.style.maxHeight = "200px";
   dropdown.style.overflowY = "auto";
+  dropdown.style.borderRadius = "5px";
+  dropdown.style.boxShadow = "0 2px 4px rgba(0, 0, 0, 0.1)";
 
   timezones.forEach(({ location, abbreviation, offset }) => {
     let checkboxContainer = document.createElement("div");
@@ -133,6 +154,15 @@ function showTimezonePopup(selectedText) {
   let saveButton = document.createElement("button");
   saveButton.textContent = "Save";
   saveButton.style.marginTop = "10px";
+  saveButton.style.padding = "8px 12px";
+  saveButton.style.border = "none";
+  saveButton.style.borderRadius = "5px";
+  saveButton.style.background = "#28a745";
+  saveButton.style.color = "#ffffff";
+  saveButton.style.cursor = "pointer";
+  saveButton.style.transition = "background 0.3s ease";
+  saveButton.onmouseover = () => saveButton.style.background = "#218838";
+  saveButton.onmouseout = () => saveButton.style.background = "#28a745";
   dropdown.appendChild(saveButton);
 
   saveButton.onclick = () => {
@@ -147,6 +177,8 @@ function showTimezonePopup(selectedText) {
   document.body.appendChild(popup);
 
   document.addEventListener("click", () => {
-    popup.remove();
+    popup.style.opacity = "0";
+    popup.style.transform = "translateY(-10px)";
+    setTimeout(() => popup.remove(), 300);
   }, { once: true });
 }
