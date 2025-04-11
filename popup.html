@@ -7,10 +7,28 @@
       font-family: Arial, sans-serif;
       padding: 10px;
     }
+    #timezones {
+      margin-top: 20px;
+      width: 200px;
+    }
+    .timezone-box {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      margin-bottom: 10px;
+      background: #f9f9f9;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .timezone-box.user-timezone {
+      background: #e9f7ef;
+    }
   </style>
 </head>
 <body>
   <h3>Timezone Converter</h3>
   <p>Select an ISO datetime on any webpage and right-click to convert it to multiple timezones.</p>
+  <div id="timezones"></div>
+  <script src="popup.js"></script>
 </body>
 </html>
