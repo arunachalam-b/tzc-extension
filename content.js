@@ -85,6 +85,11 @@ function showTimezonePopup(selectedText) {
     }
   }
 
+  const formatDate = (date) => {
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+  };
+
   const displaySavedTimezones = () => {
     clearTimeRoot();
     showUserTimezone();
@@ -136,14 +141,14 @@ function showTimezonePopup(selectedText) {
 
       // Add date and time in 24-hour format to the top half
       let dateTime24Element = document.createElement("div");
-      dateTime24Element.textContent = `${localTime.toISOString().slice(0, 10)} ${localTime.toISOString().slice(11, 19)}`; // Date and time in 24-hour format
+      dateTime24Element.textContent = `${formatDate(localTime)} ${localTime.toISOString().slice(11, 19)}`; // Date and time in 24-hour format
       dateTime24Element.style.marginBottom = "5px";
       rightSection.appendChild(dateTime24Element);
 
       // Add date and time in 12-hour format to the bottom half
       let dateTime12Element = document.createElement("div");
-      const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
-      dateTime12Element.textContent = localTime.toLocaleString('en-US', options); // Date and time in 12-hour format
+      const options = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+      dateTime12Element.textContent = `${formatDate(localTime)} ${localTime.toLocaleTimeString('en-US', options)}`; // Date and time in 12-hour format
       rightSection.appendChild(dateTime12Element);
 
       // Append sections to the timezone box
